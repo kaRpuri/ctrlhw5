@@ -26,10 +26,10 @@ def box_obstacle(ee_pos, box_center, width, height):
   dx_pos = AutoDiffXd.max(dx, AutoDiffXd(0.0))
   dz_pos = AutoDiffXd.max(dz, AutoDiffXd(0.0))
   
-  outside_dist = AutoDiffXd.sqrt(dx_pos * dx_pos + dz_pos * dz_pos)
-  inside_dist = AutoDiffXd.min(AutoDiffXd.max(dx, dz), AutoDiffXd(0.0))
+  full_dist = AutoDiffXd.sqrt(dx_pos * dx_pos + dz_pos * dz_pos)
+  in_dist = AutoDiffXd.min(AutoDiffXd.max(dx, dz), AutoDiffXd(0.0))
   
-  return outside_dist + inside_dist
+  return full_dist + in_dist
 
 
 def collision_constraint_function(box_params):

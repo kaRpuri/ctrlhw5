@@ -82,7 +82,7 @@ def find_swingup_trajectory(N, initial_state, final_configuration, box_centers, 
         # for every box
         for box_center in box_centers:
             box_params = (box_center, box_width, box_height)
-            AddBoxCollisionConstraints(prog, x[i][:n_q], box_params)
+            AddBoxCollisionConstraints(prog, x[i][:2], box_params)
             
 
     # Add the collocation aka dynamics constraints
@@ -91,8 +91,7 @@ def find_swingup_trajectory(N, initial_state, final_configuration, box_centers, 
     # TODO: Add the cost function here
     cost = 0
     for i in range(N - 1):
-        prog.AddQuadraticCost((dt / 2) * np.eye(n_u), np.zeros(n_u), u[i])
-        prog.AddQuadraticCost((dt / 2) * np.eye(n_u), np.zeros(n_u), u[i + 1])
+        prog.AddQuadraticCost((dt/2) * (u[i].T @ u[i] + u[i+1].T @ u[i+1]))
 
     # TODO: Add bounding box constraints on the inputs and qdot
     for i in range(N):
@@ -103,7 +102,7 @@ def find_swingup_trajectory(N, initial_state, final_configuration, box_centers, 
     # TODO: give the solver an initial guess for x and u using prog.SetInitialGuess(var, value)
     for i in range(N):
         prog.SetInitialGuess(x[i], np.zeros(n_x))
-        prog.SetInitialGuess(u[i], np.zeros(n_u))
+        prog.SetInitialGuess(u[i], np.random.uniform(-effort_limits, effort_limits))
         prog.SetInitialGuess(x[i][0], np.pi)
         prog.SetInitialGuess(x[i][2], 0.0)
         prog.SetInitialGuess(x[i][3], 0.0)  
