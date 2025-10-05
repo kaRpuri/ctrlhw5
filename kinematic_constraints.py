@@ -29,7 +29,7 @@ def box_obstacle(ee_pos, box_center, width, height):
   full_dist = AutoDiffXd.sqrt(dx_pos * dx_pos + dz_pos * dz_pos)
   in_dist = AutoDiffXd.min(AutoDiffXd.max(dx, dz), AutoDiffXd(0.0))
   
-  return full_dist + in_dist - 0.05
+  return full_dist + in_dist 
 
 
 def collision_constraint_function(box_params):
@@ -66,4 +66,4 @@ def AddBoxCollisionConstraints(prog, q, box_params):
   coll_constr = collision_constraint_function(box_params)
 
   # TODO: Add collision constraint as an inequality constraint using prog.AddConstraint
-  prog.AddConstraint(coll_constr, np.array([0.0]), np.array([np.inf]), q)
+  prog.AddConstraint(coll_constr, np.array([0.05]), np.array([np.inf]), q)

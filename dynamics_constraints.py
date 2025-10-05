@@ -33,7 +33,7 @@ def CollocationConstraintEvaluator(acrobot, context, dt, x_i, u_i, x_ip1, u_ip1)
   f_i = EvaluateDynamics(acrobot, context, x_i, u_i)
   f_ip1 = EvaluateDynamics(acrobot, context, x_ip1, u_ip1)
 
-  h_i = 3/(2*dt) * (x_ip1 - x_i) - 1/4 * (f_i - f_ip1) - EvaluateDynamics(acrobot, context, (x_i + x_ip1)/2 - (dt/8)*(f_ip1 - f_i), (u_i + u_ip1)/2)
+  h_i = (3/(2*dt)) * (x_ip1 - x_i) - (1/4) * (f_i - f_ip1) - EvaluateDynamics(acrobot, context, (x_i + x_ip1)/2 - (dt/8)*(f_ip1 - f_i), (u_i + u_ip1)/2)
 
   return h_i
 
@@ -54,7 +54,7 @@ def AddCollocationConstraints(prog, acrobot, context, N, x, u, timesteps):
     # Hint: use prog.AddConstraint(CollocationConstraintHelper, lb, ub, vars)
     # where vars = hstack(x[i], u[i], ...)
     vars = np.hstack((x[i], u[i], x[i+1], u[i+1]))
-    lb = np.zeros((n_x,))
-    ub = np.zeros((n_x,))
+    lb = np.zeros((4,))
+    ub = np.zeros((4,))
 
     prog.AddConstraint(CollocationConstraintHelper, lb, ub, vars)
