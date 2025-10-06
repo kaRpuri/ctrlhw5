@@ -96,8 +96,8 @@ def find_swingup_trajectory(N, initial_state, final_configuration, box_centers, 
     # TODO: Add bounding box constraints on the inputs and qdot
     for i in range(N):
         prog.AddBoundingBoxConstraint(-effort_limits, effort_limits, u[i])
-        prog.AddBoundingBoxConstraint(-joint_limits, joint_limits, x[i][:n_q])
-        prog.AddBoundingBoxConstraint(-vel_limits, vel_limits, x[i][n_q:])
+        prog.AddBoundingBoxConstraint(-joint_limits, joint_limits, x[i, :n_q])
+        prog.AddBoundingBoxConstraint(-vel_limits, vel_limits, x[i, n_q:])
 
     # TODO: give the solver an initial guess for x and u using prog.SetInitialGuess(var, value)
     for i in range(N):
